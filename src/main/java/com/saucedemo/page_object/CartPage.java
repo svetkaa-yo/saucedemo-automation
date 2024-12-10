@@ -25,24 +25,16 @@ public class CartPage {
         return shoppingCartItemQuantity.getText();
     }
 
-    public CartItem findCartItemByName(String name) {
-        for (WebElement webElement : cartItemElements) {
-            if (webElement.getText().startsWith(name)) {
-                return new CartItem(webElement);
-            }
-        }
-        return null;
-    }
-
-    public Integer getCartItemCount() {
+    public Integer cartItemCount() {
         return cartItemElements.size();
     }
 
-    public CartItem findFirstCartItem() {
+    public CartItem getFirstCartItem() {
         WebElement firstWebElement = cartItemElements.get(0);
-        return firstWebElement.findElement(By.)
+        return new CartItem(firstWebElement);
     }
-        return null;
+
+
 
 
 }

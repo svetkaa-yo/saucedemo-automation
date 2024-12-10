@@ -15,13 +15,17 @@ public class CartItem {
         PageFactory.initElements(webElement,this);
     }
 
+    public String getItemQuantity(){
+        return itemIndex.getText();
+    }
+
     public String getItemName(){
         return itemName.getText();
     }
 
-    public String getItemIndex(){
-        return itemIndex.getText();
-    }
+
+
+
 
 
 

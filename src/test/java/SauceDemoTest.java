@@ -1,7 +1,4 @@
-import com.saucedemo.page_object.CartPage;
-import com.saucedemo.page_object.InventoryItem;
-import com.saucedemo.page_object.InventoryPage;
-import com.saucedemo.page_object.LoginPage;
+import com.saucedemo.page_object.*;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -22,6 +19,7 @@ public class SauceDemoTest {
     LoginPage loginPage;
     InventoryPage inventoryPage;
     CartPage cartPage;
+
 
     Configurations configs; //массив разных конфигураций, переменная класса config.properties
     Configuration config; //класс для работы с одной конфигурацией
@@ -58,18 +56,31 @@ public class SauceDemoTest {
         Assert.assertEquals(item.getButtonColor(),"rgba(19, 35, 34, 1)"); //selenium переводит в rgba
         //добавить item в корзину
         item.clickButton();
-        //сравниваем поменялся ли цвет и текст
+        //сравнить поменялся ли цвет и текст
         Assert.assertEquals(item.getButtonText(),"Remove");
         Assert.assertEquals(item.getButtonColor(),"rgba(226, 35, 26, 1)");
         //проверить, что на иконке корзины появилась цифра 1
         Assert.assertEquals(inventoryPage.getShoppingCartItemQuantity(),"1");
         //нажать на иконку корзины
         inventoryPage.clickShoppingCartLink();
-        //убедиться, что мы находимся на странице корзины
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html");
-        //снова проверяем цифру на иконке корзины
+        //убедиться, что открыта страница корзины
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html"); //нужна ли эта проверка, погуглить лучшую проверку для ссылки
+        //проверить цифру на иконке корзины
         Assert.assertEquals(cartPage.getShoppingCartItemQuantity(),"1");
-        //проверить есть ли в корзине item с таким названием
+        //проверить сколько в корзине items
+        Integer cartItemCount = cartPage.cartItemCount();
+        Assert.assertEquals(cartItemCount, 1);
+        //достать первый item
+        CartItem cartItem = cartPage.getFirstCartItem();
+        //Проверить имя и количество товара
+        Assert.assertEquals(cartItem.getItemName(), "Sauce Labs Backpack");
+        Assert.assertEquals(cartItem.getItemQuantity(), "1");
+
+
+
+
+
+
 
 
 
