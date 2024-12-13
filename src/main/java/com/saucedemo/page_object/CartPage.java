@@ -11,18 +11,12 @@ import static org.openqa.selenium.support.PageFactory.initElements;
 
 public class CartPage {
 
-    @FindBy(className = "shopping_cart_badge")
-    private WebElement shoppingCartItemQuantity;
     @FindBy(className = "cart_item")
     private List<WebElement> cartItemElements;
 
 
     public CartPage(WebDriver driver) {
         initElements(driver, this);
-    }
-
-    public String getShoppingCartItemQuantity() {
-        return shoppingCartItemQuantity.getText();
     }
 
     public Integer cartItemCount() {

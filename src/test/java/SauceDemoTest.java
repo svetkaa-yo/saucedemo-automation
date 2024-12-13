@@ -2,16 +2,15 @@ import com.saucedemo.page_object.*;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.openqa.selenium.By;
+import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.http.TextMessage;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.w3c.dom.Text;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SauceDemoTest {
 
@@ -19,6 +18,7 @@ public class SauceDemoTest {
     LoginPage loginPage;
     InventoryPage inventoryPage;
     CartPage cartPage;
+    Header header;
 
 
     Configurations configs; //массив разных конфигураций, переменная класса config.properties
@@ -30,6 +30,7 @@ public class SauceDemoTest {
         loginPage = new LoginPage(driver);
         inventoryPage = new InventoryPage(driver);
         cartPage = new CartPage(driver);
+        header = new Header(driver);
 
         configs = new Configurations();
         config = configs.properties("config.properties");
@@ -47,34 +48,34 @@ public class SauceDemoTest {
         loginPage.authorize(config.getString("username"), config.getString("password"));
 
         Integer inventoryItemCount = inventoryPage.getInventoryItemCount(); //считаем сколько их
-        Assert.assertEquals(inventoryItemCount, 6); //сравниваем
+        assertThat(inventoryItemCount).isEqualTo(6); //сравниваем используя AssertJ
 
-        InventoryItem item = inventoryPage.findItemByName("Sauce Labs Backpack");//найти нужный item из списка
-        Assert.assertNotNull(item,"Item not found");//проверить, что объект не пустой
+        InventoryItem item = inventoryPage.findItemByName("Backpack");//найти нужный item из списка
+        assertThat(item).withFailMessage("Item not found").isNotNull();//проверить, что объект не пустой
         //проверить текст и цвет кнопки
-        Assert.assertEquals(item.getButtonText(),"Add to cart");
-        Assert.assertEquals(item.getButtonColor(),"rgba(19, 35, 34, 1)"); //selenium переводит в rgba
+        assertThat(item.getButtonText()).isEqualTo("Add to cart");
+        assertThat(item.getButtonColor()).isEqualTo("rgba(19, 35, 34, 1)"); //selenium переводит в rgba
         //добавить item в корзину
         item.clickButton();
         //сравнить поменялся ли цвет и текст
-        Assert.assertEquals(item.getButtonText(),"Remove");
-        Assert.assertEquals(item.getButtonColor(),"rgba(226, 35, 26, 1)");
+        assertThat(item.getButtonText()).isEqualTo("Remove");
+        assertThat(item.getButtonColor()).isEqualTo("rgba(226, 35, 26, 1)");
         //проверить, что на иконке корзины появилась цифра 1
-        Assert.assertEquals(inventoryPage.getShoppingCartItemQuantity(),"1");
+        assertThat(header.getShoppingCartItemQuantity()).isEqualTo("1");
         //нажать на иконку корзины
-        inventoryPage.clickShoppingCartLink();
+        header.clickShoppingCartLink();
         //убедиться, что открыта страница корзины
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html"); //нужна ли эта проверка, погуглить лучшую проверку для ссылки
+        assertThat(driver.getCurrentUrl()).isEqualTo( "https://www.saucedemo.com/cart.html"); //нужна ли эта проверка, погуглить лучшую проверку для ссылки
         //проверить цифру на иконке корзины
-        Assert.assertEquals(cartPage.getShoppingCartItemQuantity(),"1");
-        //проверить сколько в корзине items
+        Assert.assertEquals(header.getShoppingCartItemQuantity(),"1");
+        //посчитать сколько в корзине items и проверить, что только один
         Integer cartItemCount = cartPage.cartItemCount();
-        Assert.assertEquals(cartItemCount, 1);
+        assertThat(cartItemCount).isEqualTo(1);
         //достать первый item
         CartItem cartItem = cartPage.getFirstCartItem();
         //Проверить имя и количество товара
-        Assert.assertEquals(cartItem.getItemName(), "Sauce Labs Backpack");
-        Assert.assertEquals(cartItem.getItemQuantity(), "1");
+        assertThat(cartItem.getItemName()).isEqualTo("Sauce Labs Backpack");
+        assertThat(cartItem.getItemQuantity()).isEqualTo("1");
 
 
 
