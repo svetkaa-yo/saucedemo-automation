@@ -13,6 +13,8 @@ public class CartPage {
 
     @FindBy(className = "cart_item")
     private List<WebElement> cartItemElements;
+    @FindBy(id = "checkout")
+    private WebElement checkoutButton;
 
 
     public CartPage(WebDriver driver) {
@@ -26,6 +28,19 @@ public class CartPage {
     public CartItem getFirstCartItem() {
         WebElement firstWebElement = cartItemElements.get(0);
         return new CartItem(firstWebElement);
+    }
+
+    public CartItem getCartItemByName(String itemName) {
+        for (WebElement cartItemByNameElement : cartItemElements) { //итерируем по списку и переменная куда будет присваиваться элементы из списка
+            if (cartItemByNameElement.getText().contains(itemName)) {
+                return new CartItem(cartItemByNameElement);
+            }
+        }
+        return null; //если не нашел, то возвращает null
+    }
+
+    public void clickCheckoutButton(){
+        checkoutButton.click();
     }
 
 
