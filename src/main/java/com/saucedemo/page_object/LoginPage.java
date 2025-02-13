@@ -1,6 +1,7 @@
 package com.saucedemo.page_object;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,11 +21,14 @@ public class LoginPage {
 
     //PageFactory
     @FindBy(id="user-name") //аннотации чтобы драйвер понял какой это элемент в HTML
-    public WebElement usernameField; //
+    private WebElement usernameField; //
     @FindBy(name="password")
-    public WebElement passwordField;
+    private WebElement passwordField;
     @FindBy(xpath="//input[@data-test='login-button']")
-    public WebElement loginButton;
+    private WebElement loginButton;
+    @FindBy(className="error-message-container")
+    private WebElement errorMessageElement;
+
 
     public LoginPage(WebDriver driver) {
         //this.usernameField = driver.findElement(By.id("user-name")); тоже самое что инит
@@ -38,4 +42,16 @@ public class LoginPage {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton));
         loginButton.click();
     }
+
+    public String getErrorMessage(){
+        return errorMessageElement.getText();
+    }
+
+    public void clearFields(){
+        usernameField.sendKeys(Keys.CONTROL+"a");
+        usernameField.sendKeys(Keys.DELETE);
+        passwordField.sendKeys(Keys.CONTROL+"a");
+        passwordField.sendKeys(Keys.DELETE);
+    }
+
 }

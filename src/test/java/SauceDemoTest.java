@@ -106,23 +106,39 @@ public class SauceDemoTest {
         //нажать на кнопку Finish и сравнить текс
         checkoutPage.getFinishButton().click();
         assertThat(checkoutPage.getCompleteHeader().getText()).isEqualTo("Thank you for your order!");
+    }
 
+    @Test //TODO: User Login validation
+    public void sauceDemoUserLoginValidationTest(){
+        //set username, set password, click button, get error message, clear fields
+        //empty fields, one field empty, one field invalid data, both invalid
 
+        loginPage.authorize("","");
+        assertThat(loginPage.getErrorMessage()).isEqualTo("Epic sadface: Username is required");
+        loginPage.clearFields();
 
+        loginPage.authorize("standard_user","");
+        assertThat(loginPage.getErrorMessage()).isEqualTo("Epic sadface: Password is required");
+        loginPage.clearFields();
 
+        loginPage.authorize("","secret_sauce");
+        assertThat(loginPage.getErrorMessage()).isEqualTo("Epic sadface: Username is required");
+        loginPage.clearFields();
 
+        loginPage.authorize("standard_user","secret");
+        assertThat(loginPage.getErrorMessage()).isEqualTo
+                ("Epic sadface: Username and password do not match any user in this service");
+        loginPage.clearFields();
 
+        loginPage.authorize("standard","secret_sauce");
+        assertThat(loginPage.getErrorMessage()).isEqualTo
+                ("Epic sadface: Username and password do not match any user in this service");
+        loginPage.clearFields();
 
-
-
-
-
-
-
-
-
-
-
+        loginPage.authorize("standard","secret");
+        assertThat(loginPage.getErrorMessage()).isEqualTo
+                ("Epic sadface: Username and password do not match any user in this service");
+        loginPage.clearFields();
 
     }
 
