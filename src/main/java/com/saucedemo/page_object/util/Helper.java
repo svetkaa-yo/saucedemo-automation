@@ -1,4 +1,4 @@
-package com.saucedemo.utils;
+package com.saucedemo.page_object.util;
 
 public class Helper {
 

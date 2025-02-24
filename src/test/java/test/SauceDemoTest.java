@@ -1,9 +1,10 @@
+package test;
+
 import com.github.javafaker.Faker;
 import com.saucedemo.page_object.*;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.assertj.core.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -11,7 +12,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.saucedemo.utils.Helper.convertStringWithDollarToDouble;
+import static com.saucedemo.page_object.CartItem.Helper.convertStringWithDollarToDouble;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SauceDemoTest {
