@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SauceDemoTest {
 
-    WebDriver driver;//объявлена пустая переменная класса
+    WebDriver driver;//empty class variable declared
     LoginPage loginPage;
     InventoryPage inventoryPage;
     CartPage cartPage;
@@ -24,15 +24,15 @@ public class SauceDemoTest {
     CheckoutPage checkoutPage;
 
 
-    Configurations configs; //массив разных конфигураций, переменная класса config.properties
-    Configuration config; //класс для работы с одной конфигурацией
+    Configurations configs; //array of different configurations, class variable config.properties
+    Configuration config; //class for working with one configuration
 
     Faker randomData = new Faker();
 
 
     @BeforeMethod
     public void setUp() throws ConfigurationException {
-        driver = new ChromeDriver(); //придаем значение
+        driver = new ChromeDriver(); //assign a value to a variable
         loginPage = new LoginPage(driver);
         inventoryPage = new InventoryPage(driver);
         cartPage = new CartPage(driver);
@@ -42,76 +42,76 @@ public class SauceDemoTest {
         configs = new Configurations();
         config = configs.properties("config.properties");
 
-        driver.get(config.getString("web.url")); //открыть сайт
+        driver.get(config.getString("web.url")); //open the website
     }
 
     @Test //TODO: test case (1) open login page (2) user writes username (3) user writes password (4) user click on login button,(5) expected result
     public void openSauceDemoLoginTest() {
         loginPage.authorize(config.getString("username"),config.getString("password"));
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");//проверка actual result, expected result
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/inventory.html");//JUnit, test actual result, expected result
     }
     @Test //TODO: Implement add item to the cart
     public void sauceDemoAddItemToTheCartTest() {
         loginPage.authorize(config.getString("username"), config.getString("password"));
 
-        Integer inventoryItemCount = inventoryPage.getInventoryItemCount(); //считаем сколько их
-        assertThat(inventoryItemCount).isEqualTo(6); //сравниваем используя AssertJ
+        Integer inventoryItemCount = inventoryPage.getInventoryItemCount(); //counting how much items
+        assertThat(inventoryItemCount).isEqualTo(6); //AssertJ
 
-        InventoryItem item = inventoryPage.findItemByName("Backpack");//найти нужный item из списка
-        InventoryItem item2 = inventoryPage.findItemByName("Bike Light");//найти нужный item из списка
-        assertThat(item).withFailMessage("Item not found").isNotNull();//проверить, что объект не пустой
+        InventoryItem item = inventoryPage.findItemByName("Backpack");//find the desired item from the list
+        InventoryItem item2 = inventoryPage.findItemByName("Bike Light");//find the desired item from the list
+        assertThat(item).withFailMessage("Item not found").isNotNull();//check if object is not empty, if empty, then returnes message
         assertThat(item2).withFailMessage("Item not found").isNotNull();
-        //проверить текст и цвет кнопки
+        //check the button text and color
         assertThat(item.getButtonText()).isEqualTo("Add to cart");
-        assertThat(item.getButtonColor()).isEqualTo("rgba(19, 35, 34, 1)"); //selenium переводит в rgba
-        //добавить item в корзину
+        assertThat(item.getButtonColor()).isEqualTo("rgba(19, 35, 34, 1)"); //selenium def.format is rgba
+        //add item to the cart
         item.clickButton();
         item2.clickButton();
-        //сравнить поменялся ли цвет и текст
+        //assert color and text changes
         assertThat(item.getButtonText()).isEqualTo("Remove");
         assertThat(item.getButtonColor()).isEqualTo("rgba(226, 35, 26, 1)");
-        //проверить, что на иконке корзины появилась цифра 1
+        //check that the number of items appears on the cart icon
         assertThat(header.getShoppingCartItemQuantity()).isEqualTo("2");
-        //нажать на иконку корзины
+        //click on the cart icon
         header.clickShoppingCartLink();
-        //убедиться, что открыта страница корзины
-        assertThat(driver.getCurrentUrl()).isEqualTo( "https://www.saucedemo.com/cart.html"); //нужна ли эта проверка, погуглить лучшую проверку для ссылки
-        //проверить цифру на иконке корзины
+        //assert that the cart page is opened
+        assertThat(driver.getCurrentUrl()).isEqualTo( "https://www.saucedemo.com/cart.html"); 
+        //check the number of items on the cart icon
         Assert.assertEquals(header.getShoppingCartItemQuantity(),"2");
-        //посчитать сколько в корзине items и проверить, что только один
+        //count items and check number
         Integer cartItemCount = cartPage.cartItemCount();
         assertThat(cartItemCount).isEqualTo(2);
-        //достать два  items
+        //get first item and item by name
         CartItem cartItem = cartPage.getFirstCartItem();
         CartItem cartItem2 = cartPage.getCartItemByName("Bike Light");
-        //Проверить имя и количество товара
+        //check item name and quantity
         assertThat(cartItem.getItemName()).isEqualTo("Sauce Labs Backpack");
         assertThat(cartItem2.getItemName()).isEqualTo("Sauce Labs Bike Light");
-        //количество первого товара должно быть всегда 1
+        //the quantity of the first item must always be 1 initially
         assertThat(cartItem.getItemQuantity()).isEqualTo("1");
-        //нажать на кнопку Checkout
+        //click Checkout button
         cartPage.clickCheckoutButton();
-        //заполнить форму и нажать кнопку
+        //fill out the form and click Continue button
         checkoutPage.fillStepOne(
                 randomData.funnyName().name(),
                 randomData.address().lastName(),
                 randomData.address().zipCode());
-        //Найти цену по имени товара как String, конвертировать в Double
+        //Find price by product name as String, convert to Double
         double backpackPrice = convertStringWithDollarToDouble(checkoutPage.getPriceByItemName("Backpack"));
         double bikeLightPrice = convertStringWithDollarToDouble(checkoutPage.getPriceByItemName("Bike Light"));
         double sumPrice = backpackPrice + bikeLightPrice;
-        //сложить сумму+tax, сравнить с totalPrice
+        //sum+tax compare with totalPrice
         double totalPrice = sumPrice + checkoutPage.getTax();
         assertThat(checkoutPage.getSummaryTotal()).isEqualTo(totalPrice);
-        //нажать на кнопку Finish и сравнить текс
+        //click Finish button and compare text
         checkoutPage.getFinishButton().click();
         assertThat(checkoutPage.getCompleteHeader().getText()).isEqualTo("Thank you for your order!");
     }
 
     @Test //TODO: User Login validation
     public void sauceDemoUserLoginValidationTest(){
-        //set username, set password, click button, get error message, clear fields
-        //empty fields, one field empty, one field invalid data, both invalid
+        //Steps: set username, set password, click button, get error message, clear fields
+        //Test Cases: empty fields, one field empty, one field invalid data, both invalid
 
         loginPage.authorize("","");
         assertThat(loginPage.getErrorMessage()).isEqualTo("Epic sadface: Username is required");
@@ -144,8 +144,8 @@ public class SauceDemoTest {
 
     @AfterMethod
     public void tearDown() {
-        driver.close(); //закрыть вкладку
-        driver.quit();  //закроется программа-драйвер и мы ее не сможем больше использовать
+        driver.close(); //close tab
+        driver.quit();  //close the driver program
     }
 
 }
