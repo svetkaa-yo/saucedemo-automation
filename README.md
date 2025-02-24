@@ -11,7 +11,7 @@ SauceDemoTest.java
 - sauceDemoUserLoginValidationTest() - User Login validation test
 - sauceDemoAddItemToTheCartTest() - User scenario for adding an item to the cart and tests to verify the expected result.
 
-### 2. **Page Object (`test/java/page object/`)**
+### 2. **Page Object (`test/java/page-object/`)**
 - LoginPage.java
 - InventoryPage.java
 - InventoryItem.java
