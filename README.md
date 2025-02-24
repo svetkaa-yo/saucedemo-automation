@@ -1,6 +1,6 @@
 ## Overview
 
-I have created several automated test cases for https://www.saucedemo.com/ demo website. 
+I have created several automated test cases for the https://www.saucedemo.com/ demo website. 
 It features a simple e-commerce-style interface that allows users to simulate logging in, adding products to a shopping cart, and completing transactions. 
 
 ## The Structure 
