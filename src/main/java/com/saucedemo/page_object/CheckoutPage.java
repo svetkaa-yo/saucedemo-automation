@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 import java.util.Optional;
 
-import static com.saucedemo.utils.Helper.convertStringWithDollarToDouble;
+import static com.saucedemo.page_object.util.Helper.convertStringWithDollarToDouble;
 
 public class CheckoutPage {
 
@@ -38,22 +38,6 @@ public class CheckoutPage {
         PageFactory.initElements(driver,this);
     }
 
-    public List<WebElement> getCartItemElements() {
-
-        return cartItemElements;
-    }
-
-    public WebElement getFirstNameField() {
-        return firstNameField;
-    }
-
-    public WebElement getLastNameField() {
-        return lastNameField;
-    }
-
-    public WebElement getPostalCodeField() {
-        return postalCodeField;
-    }
 
     public WebElement getTaxLabel() {
         return taxLabel;

@@ -12,7 +12,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.saucedemo.page_object.CartItem.Helper.convertStringWithDollarToDouble;
+import static com.saucedemo.page_object.util.Helper.convertStringWithDollarToDouble;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SauceDemoTest {

@@ -22,13 +22,4 @@ public class CartItem {
         return itemName.getText();
     }
 
-
-    public static class Helper {
-
-        public static double convertStringWithDollarToDouble(String amount) {
-            return Double.parseDouble(amount.replace("$", " "));
-        }
-
-
-    }
 }
